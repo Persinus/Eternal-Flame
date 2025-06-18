@@ -11,7 +11,7 @@ jobs:
 
     steps:  # Các bước thực hiện trong job
       - name: Check out repository  # Bước 1: Lấy mã nguồn từ repository
-        uses: actions/checkout@v2  # Sử dụng action có sẵn của GitHub để clone repository
+        uses: actions/checkout@v4  # Sử dụng action có sẵn của GitHub để clone repository
 
       - name: Build Docker Image  # Bước 2: Tạo Docker image
         run: |
