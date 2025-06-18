@@ -1,0 +1,10 @@
+# EditorConfig giúp thống nhất phong cách mã nguồn
+root = true  # Xác định đây là tệp gốc, ngăn chặn tìm kiếm các tệp .editorconfig khác trong cây thư mục
+
+[*]  # Áp dụng cho tất cả các tệp
+charset = utf-8  # Đặt mã hóa ký tự là UTF-8
+indent_style = space  # Sử dụng khoảng trắng để thụt lề thay vì tab
+indent_size = 4  # Mỗi mức thụt lề sử dụng 4 khoảng trắng
+end_of_line = lf  # Sử dụng ký tự xuống dòng LF (Unix-style)
+insert_final_newline = true  # Đảm bảo thêm một dòng trống cuối cùng vào tệp
+trim_trailing_whitespace = true  # Xóa các khoảng trắng không cần thiết ở cuối mỗi dòng
