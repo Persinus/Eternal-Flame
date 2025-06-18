@@ -1,0 +1,13 @@
+# Cấu hình Dependabot để cập nhật các package Unity
+version: 2
+updates:
+  - package-ecosystem: "npm" # Unity Package Manager dựa trên npm registry
+    directory: "/"           # Thư mục gốc của dự án
+    schedule:
+      interval: "weekly"     # Lên lịch kiểm tra cập nhật hàng tuần
+    ignore:
+      - dependency-name: "com.unity.modules.*" # Bỏ qua các module Unity mặc định
+  - package-ecosystem: "github-actions" # Nếu sử dụng GitHub Actions trong CI/CD
+    directory: "/.github/workflows"     # Thư mục chứa các workflow
+    schedule:
+      interval: "weekly"                # Cập nhật định kỳ hàng tuần
