@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1b3b4b945939a54ea0b23d3396115fb, type: 3}
+  m_Name: sanim_415111_SkeletonData
+  m_EditorClassIdentifier: spine-unity::Spine.Unity.SkeletonDataAsset
+  atlasAssets:
+  - {fileID: 11400000, guid: f15d59f7c9f30ac4598453b04a89ec14, type: 2}
+  scale: 0.01
+  skeletonJSON: {fileID: 4900000, guid: 7315e8f935446184bad62c86667ea061, type: 3}
+  isUpgradingBlendModeMaterials: 0
+  blendModeMaterials:
+    requiresBlendModeMaterials: 1
+    applyAdditiveMaterial: 1
+    additiveMaterials:
+    - pageName: sanim_415111.png
+      material: {fileID: 2100000, guid: e3de67444692d6643aaa82ce16efb58b, type: 2}
+    multiplyMaterials: []
+    screenMaterials: []
+  skeletonDataModifiers: []
+  fromAnimation: []
+  toAnimation: []
+  duration: []
+  defaultMix: 0.2
+  controller: {fileID: 0}
