@@ -1,0 +1,42 @@
+# Sử dụng Ubuntu làm base image (nền tảng cơ bản để xây dựng container)
+FROM ubuntu:20.04
+
+# Cài đặt các dependencies cần thiết cho Unity
+RUN apt-get update && apt-get install -y \ 
+# Cập nhật danh sách các gói và cài đặt các thư viện cần thiết
+    wget \                  
+# Công cụ tải tệp từ internet
+    libglib2.0-dev \        
+# Thư viện GLib, được sử dụng bởi nhiều ứng dụng GUI
+    libx11-dev \            
+# Thư viện X11, cần cho các ứng dụng đồ họa
+    libxcursor-dev \        
+# Hỗ trợ con trỏ chuột cho ứng dụng
+    libxrandr-dev \         
+# Quản lý độ phân giải màn hình
+    libxinerama-dev \       
+# Hỗ trợ nhiều màn hình
+    libxi-dev \             
+# Thư viện giao tiếp với các thiết bị đầu vào
+    libdbus-1-dev \         
+# Thư viện giao tiếp giữa các ứng dụng thông qua D-Bus
+    unzip \                 
+# Công cụ giải nén các tệp .zip
+    && apt-get clean        
+# Dọn dẹp các tệp tạm để giảm kích thước image
+
+# Tải Unity Editor Alpha từ URL cụ thể (URL này giả định, thay bằng URL thực)
+RUN wget -O UnityAlpha.tar.xz https://download.unity3d.com/alpha/6000.2.0a6/Unity.tar.xz && \  
+# Tải Unity
+tar -xf UnityAlpha.tar.xz -C /opt/ && \  
+# Giải nén Unity vào thư mục /opt/
+    rm UnityAlpha.tar.xz                     # Xóa tệp nén sau khi giải nén
+
+# Cài đặt Unity Editor CLI (Command Line Interface) vào PATH để có thể gọi từ terminal
+ENV PATH="/opt/Unity/Editor:$PATH"
+
+# Copy toàn bộ dự án từ thư mục hiện tại trên máy host vào thư mục /project trong container
+COPY . /project
+
+# Đặt thư mục làm việc mặc định khi container chạy
+WORKDIR /project
