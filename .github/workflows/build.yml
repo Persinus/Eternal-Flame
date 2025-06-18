@@ -27,7 +27,7 @@ jobs:
           -quit                                                     # Đóng Unity sau khi hoàn thành
 
       - name: Upload Build Artifacts  # Bước 4: Upload file build để lưu trữ và tải về sau
-        uses: actions/upload-artifact@v3  # Sử dụng action có sẵn để upload artifacts
+        uses: actions/upload-artifact@v4  # Sử dụng action có sẵn để upload artifacts
         with:
           name: EternalFlameBuild  # Tên artifact sau khi upload (hiển thị trên GitHub Actions)
           path: /project/Build/    # Đường dẫn tới thư mục chứa file build Unity (được Unity tạo ra)
