@@ -1,5 +1,6 @@
 using UnityEngine;
 using Spine.Unity;
+using LoM.Super;
 
 namespace EternalFlame 
 {
@@ -27,6 +28,7 @@ namespace EternalFlame
         Hit,
         Dead,
     }
+    [SuperIcon(SuperBehaviourIcon.Animation)]
     public class FiniteStatmachine : MonoBehaviour
     {
         [SerializeField] private State currentState = State.Idle;

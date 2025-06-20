@@ -1,0 +1,27 @@
+Thank you for choosing and using our assets!
+
+For detailed information and guidance on assets, please refer to the LayerLab User Asset Guide. 
+You can access the guide by copying and pasting the following link into your browser:
+--------------------------------------
+https://tinyurl.com/LayerLabAssetGuide
+--------------------------------------
+
+
+
+
+## Font Information & License:
+
+The text in this asset uses the 'Alata', 'Josefin Sans', and 'Play' fonts provided by Google.
+You must review and comply with the licensing terms for each font.
+
+- Alata
+https://fonts.google.com/specimen/Alata?query=Alata
+https://fonts.google.com/specimen/Alata/license?query=Alata
+
+- Josefin Sans
+https://fonts.google.com/specimen/Josefin+Sans?query=Josefin+Sans
+https://fonts.google.com/specimen/Josefin+Sans/license?query=Josefin+Sans
+
+- Play
+https://fonts.google.com/specimen/Play
+https://fonts.google.com/specimen/Play/license

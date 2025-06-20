@@ -1,9 +1,11 @@
 using UnityEngine;
 using Spine.Unity;
 using System.Collections;
+using LoM.Super;
 
 namespace EternalFlame
 {
+    [SuperIcon(SuperBehaviourIcon.PlayerController)]
     public class CharacterController : MonoBehaviour
     {
         [SerializeField] InputSystem_Actions inputActions;
@@ -12,14 +14,48 @@ namespace EternalFlame
         [SerializeField] FiniteStatmachine finite_Statmachine;
         [SerializeField] Rigidbody2D rb;
         [SerializeField] Transform FlipTransform;
+        [SerializeField] float skillDuration;
+        [SerializeField] float attackDuration;
 
-        [SerializeField] float check;
-        [SerializeField] bool isGrounded = false;
+        private bool isGrounded = false;
         private bool isAttacking = false;
+        private bool isSkilling = false;
+
+        private static CharacterController instance;
+        public static CharacterController Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = FindObjectOfType<CharacterController>();
+                    if (instance == null)
+                    {
+                        GameObject obj = new GameObject("CharacterController");
+                        instance = obj.AddComponent<CharacterController>();
+                        DontDestroyOnLoad(obj);
+                        Debug.LogWarning("CharacterController instance was not found in the scene. A new instance has been created.");
+                    }
+                }
+                return instance;
+            }
+        }
+
+        void Awake()
+        {
+            if (instance == null)
+            {
+                instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else if (instance != this)
+            {
+                Destroy(gameObject);
+            }
+        }
 
         void Start()
         {
-            check = rb.linearVelocityY;
             inputActions = new InputSystem_Actions();
             inputActions.Enable();
             rb = GetComponent<Rigidbody2D>();
@@ -31,80 +67,85 @@ namespace EternalFlame
 
         void Update()
         {
-            // Kiểm tra xem nhân vật có đang tấn công không, nếu có thì không cho phép chuyển trạng thái khác
-            if (isAttacking)
-            {
-                return;
-            }
+            if (isAttacking || isSkilling) return;
 
             Vector2 movementInput = inputActions.Player.Move.ReadValue<Vector2>();
-            if (movementInput.x != 0)
-            {
-                finite_Statmachine.SetState(State.Running);
-                if (movementInput.x > 0 && FlipTransform.localScale.x < 0)
-                {
-                    FlipTransform.localScale = new Vector3(-FlipTransform.localScale.x, FlipTransform.localScale.y, FlipTransform.localScale.z);
-                }
-                else if (movementInput.x < 0 && FlipTransform.localScale.x > 0)
-                {
-                    FlipTransform.localScale = new Vector3(-FlipTransform.localScale.x, FlipTransform.localScale.y, FlipTransform.localScale.z);
-                }
-            }
-            else
-            {
-                if (isGrounded)
-                    finite_Statmachine.SetState(State.Idle);
-                else if (rb.linearVelocity.y < -0.1f && !isGrounded)
-                {
-                    finite_Statmachine.SetState(State.Jumping_Up);
-                   
-                }
-                else
-                {
-                     finite_Statmachine.SetState(State.Jumping_Down);
-                }
-            }
+            HandleMovement(movementInput);
 
-            rb.linearVelocity = new Vector2(movementInput.x * moveSpeed, rb.linearVelocity.y);
-
-            if (inputActions.Player.Jump.triggered && Mathf.Abs(rb.linearVelocity.y) < 0.1f)
+            if (inputActions.Player.Jump.triggered && isGrounded)
             {
-                rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
-               
+                rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             }
 
             if (inputActions.Player.Attack.triggered)
             {
                 StartCoroutine(HandleAttack());
             }
+            else if (inputActions.Player.Skill.triggered)
+            {
+                StartCoroutine(HandleSkill());
+            }
+        }
+
+        private void HandleMovement(Vector2 movementInput)
+        {
+            rb.linearVelocity = new Vector2(movementInput.x * moveSpeed, rb.linearVelocity.y);
+
+            if (movementInput.x != 0)
+            {
+                finite_Statmachine.SetState(State.Running);
+                FlipCharacter(movementInput.x);
+            }
+            else
+            {
+                if (isGrounded)
+                    finite_Statmachine.SetState(State.Idle);
+                else
+                    finite_Statmachine.SetState(rb.linearVelocity.y < -0.1f ? State.Jumping_Up : State.Jumping_Down);
+            }
+        }
+
+        private void FlipCharacter(float direction)
+        {
+            float scaleX = Mathf.Abs(FlipTransform.localScale.x);
+            FlipTransform.localScale = new Vector3(direction > 0 ? scaleX : -scaleX, FlipTransform.localScale.y, FlipTransform.localScale.z);
         }
 
         private IEnumerator HandleAttack()
         {
             isAttacking = true;
             finite_Statmachine.SetState(State.Attacking);
-
-            // Giả lập thời gian thực hiện hành động tấn công (thời gian này nên khớp với thời lượng animation tấn công)
-            yield return new WaitForSeconds(0.5f);
-
+            yield return new WaitForSeconds(attackDuration);
             isAttacking = false;
-            finite_Statmachine.SetState(State.Idle); // Quay lại trạng thái Idle sau khi tấn công xong
+            finite_Statmachine.SetState(State.Idle);
         }
+
+        private IEnumerator HandleSkill()
+        {
+            isSkilling = true;
+            finite_Statmachine.SetState(State.Skill);
+            yield return new WaitForSeconds(skillDuration);
+            isSkilling = false;
+            finite_Statmachine.SetState(State.Idle);
+        }
+
         private void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.gameObject.CompareTag("Ground"))
-            {
-
                 isGrounded = true;
-            }
-
         }
+
         private void OnCollisionExit2D(Collision2D collision)
         {
             if (collision.gameObject.CompareTag("Ground"))
-            {
                 isGrounded = false;
-            }
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(transform.position, 0.1f);
+            Gizmos.DrawLine(transform.position, transform.position + Vector3.down * 0.1f);
         }
     }
 }
