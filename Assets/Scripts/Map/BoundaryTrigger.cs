@@ -1,40 +1,26 @@
 using UnityEngine;
-using TMPro;
-using LoM.Super;
-namespace EternalFlame
+using System;
+
+public class BoundaryTrigger : MonoBehaviour
 {
-    [SuperIcon(SuperBehaviourIcon.Trigger)]
-    public class BoundaryTrigger : MonoBehaviour
+    public static event Action<string> OnPlayerEnterMap;
+    public static event Action OnPlayerExitMap;
+
+    [SerializeField] string mapName;
+
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        [SerializeField] string mapName; // Tên bản đồ mới
-        [SerializeField] Canvas mapNameText; // Tham chiếu đến UI Canvas để hiển thị tên
-        [SerializeField] TextMeshProUGUI mapNameTextComponent; // Tham chiếu đến TextMeshProUGUI để hiển thị tên bản đồ
-        private void OnTriggerEnter2D(Collider2D other)
+        if (other.CompareTag("Player"))
         {
-            // Kiểm tra nếu đối tượng là người chơi
-            if (other.CompareTag("Player"))
-            {
-                ShowMapName();
-            }
+            OnPlayerEnterMap?.Invoke(mapName);
         }
+    }
 
-        private void OnTriggerExit2D(Collider2D other)
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
         {
-            if (other.CompareTag("Player"))
-            {
-                HideMapName();
-            }
-        }
-
-        void ShowMapName()
-        {
-            mapNameText.gameObject.SetActive(true); // Hiển thị Canvas
-            mapNameTextComponent.text = mapName; // Cập nhật tên bản đồ
-        }
-
-        void HideMapName()
-        {
-            mapNameText.gameObject.SetActive(false); // Ẩn Canvas
+            OnPlayerExitMap?.Invoke();
         }
     }
 }

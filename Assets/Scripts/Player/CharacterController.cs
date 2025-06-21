@@ -14,12 +14,13 @@ namespace EternalFlame
         [SerializeField] FiniteStatmachine finite_Statmachine;
         [SerializeField] Rigidbody2D rb;
         [SerializeField] Transform FlipTransform;
-        [SerializeField] float skillDuration;
-        [SerializeField] float attackDuration;
-
+        [SerializeField] private float attackDuration = 0.5f;
+        [SerializeField] private float skillDuration = 1.0f;
+        [SerializeField] private float ultimateSkillDuration = 2.0f;
         private bool isGrounded = false;
         private bool isAttacking = false;
         private bool isSkilling = false;
+        private bool isUltimateSkill = false;
 
         private static CharacterController instance;
         public static CharacterController Instance
@@ -67,42 +68,50 @@ namespace EternalFlame
 
         void Update()
         {
-            if (isAttacking || isSkilling) return;
-
             Vector2 movementInput = inputActions.Player.Move.ReadValue<Vector2>();
             HandleMovement(movementInput);
 
             if (inputActions.Player.Jump.triggered && isGrounded)
             {
-                rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+                Jump();
+                finite_Statmachine.OnJump(isGrounded, rb.linearVelocity.y);
             }
 
             if (inputActions.Player.Attack.triggered)
             {
-                StartCoroutine(HandleAttack());
+                finite_Statmachine.OnAttack(attackDuration);
             }
             else if (inputActions.Player.Skill.triggered)
             {
-                StartCoroutine(HandleSkill());
+                finite_Statmachine.OnSkill(skillDuration);
+            }
+            else if (inputActions.Player.UltimateSkill.triggered)
+            {
+                finite_Statmachine.OnUltimateSkill(ultimateSkillDuration);
             }
         }
 
         private void HandleMovement(Vector2 movementInput)
         {
+            // Di chuyển ngang
             rb.linearVelocity = new Vector2(movementInput.x * moveSpeed, rb.linearVelocity.y);
 
-            if (movementInput.x != 0)
+            // Xử lý trạng thái chạy/đứng yên
+            if (Mathf.Abs(movementInput.x) > 0.01f)
             {
-                finite_Statmachine.SetState(State.Running);
+                finite_Statmachine.OnMove(movementInput, isGrounded);
                 FlipCharacter(movementInput.x);
             }
             else
             {
-                if (isGrounded)
-                    finite_Statmachine.SetState(State.Idle);
-                else
-                    finite_Statmachine.SetState(rb.linearVelocity.y < -0.1f ? State.Jumping_Up : State.Jumping_Down);
+                finite_Statmachine.OnMove(Vector2.zero, isGrounded);
             }
+        }
+
+        private void Jump()
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+          
         }
 
         private void FlipCharacter(float direction)
@@ -116,6 +125,7 @@ namespace EternalFlame
             isAttacking = true;
             finite_Statmachine.SetState(State.Attacking);
             yield return new WaitForSeconds(attackDuration);
+           
             isAttacking = false;
             finite_Statmachine.SetState(State.Idle);
         }
@@ -128,7 +138,15 @@ namespace EternalFlame
             isSkilling = false;
             finite_Statmachine.SetState(State.Idle);
         }
-
+        private IEnumerator HandleUltimateSkill()
+        {
+            isUltimateSkill = true;
+            finite_Statmachine.SetState(State.UltimateSkill);
+            yield return new WaitForSeconds(skillDuration);
+            isUltimateSkill = false;
+            finite_Statmachine.SetState(State.Idle);
+        }
+     
         private void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.gameObject.CompareTag("Ground"))
