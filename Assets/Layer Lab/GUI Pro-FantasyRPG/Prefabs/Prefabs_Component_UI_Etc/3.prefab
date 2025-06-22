@@ -953,7 +953,7 @@ GameObject:
   - component: {fileID: 2955761764855696281}
   - component: {fileID: 2955761764855696280}
   m_Layer: 5
-  m_Name: ResourceBar_Demo
+  m_Name: 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

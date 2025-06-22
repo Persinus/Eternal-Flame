@@ -196,7 +196,7 @@ GameObject:
   - component: {fileID: 6932762875453986878}
   - component: {fileID: 6932762875453986877}
   m_Layer: 5
-  m_Name: Slider_Border_EdgeDeco_02_Demo
+  m_Name: 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
