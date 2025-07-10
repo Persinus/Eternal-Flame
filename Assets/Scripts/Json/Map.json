@@ -1,0 +1,42 @@
+[
+  {
+    "id": 0,
+    "name": "Grassland"
+  },
+  {
+    "id": 1,
+    "name": "Forest Edge"
+  },
+  {
+    "id": 2,
+    "name": "Dark Forest"
+  },
+  {
+    "id": 3,
+    "name": "Cave Entrance"
+  },
+  {
+    "id": 4,
+    "name": "Crystal Cave"
+  },
+  {
+    "id": 5,
+    "name": "Mountain Pass"
+  },
+  {
+    "id": 6,
+    "name": "Frozen Peak"
+  },
+  {
+    "id": 7,
+    "name": "Ancient Ruins"
+  },
+  {
+    "id": 8,
+    "name": "Dragon Nest"
+  },
+  {
+    "id": 9,
+    "name": "Final Sanctuary"
+  }
+]

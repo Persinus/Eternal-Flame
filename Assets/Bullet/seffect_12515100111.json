@@ -1,0 +1,40 @@
+{
+"skeleton": {
+	"hash": "fQpbRD5EMvXzU4K4P1PhomUSLKw",
+	"spine": "3.8.33-beta",
+	"x": -437.39,
+	"y": -148.7,
+	"width": 600,
+	"height": 300,
+	"images": "./images/",
+	"audio": ""
+},
+"bones": [
+	{ "name": "root" },
+	{ "name": "bone98", "parent": "root", "x": 3.34, "y": 1.3 }
+],
+"slots": [
+	{ "name": "fs/0_0", "bone": "bone98", "attachment": "dd" }
+],
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"fs/0_0": {
+				"dd": { "x": -140.73, "width": 600, "height": 300 }
+			}
+		}
+	}
+],
+"animations": {
+	"animation": {
+		"bones": {
+			"bone98": {
+				"shear": [
+					{ "time": 0.0333 }
+				]
+			}
+		}
+	}
+}
+}

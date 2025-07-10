@@ -1,66 +1,71 @@
 using UnityEngine;
+using System.Collections.Generic;
+using System.IO;
 
-namespace EternalFlame
+public class MapManager : MonoBehaviour
 {
-    public class MapManager : MonoBehaviour
+    public static MapManager Instance { get; private set; }
+
+    public List<MapData> maps = new List<MapData>();
+    public int currentMapID = 0;
+    public TextAsset Map_Input;
+
+    private void Awake()
     {
-        [SerializeField] private GameObject[] maps; // Danh sách các map
-        private int currentMapIndex = 0; // Map hiện tại
-
-        public static MapManager Instance { get; private set; }
-
-        void Awake()
+        if (Instance != null)
         {
-            if (Instance == null)
-            {
-                Instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            Destroy(gameObject);
+            return;
         }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+        LoadMapData();
+    }
 
-        void Start()
+    void LoadMapData()
+    {
+        if (Map_Input != null)
         {
-            // Khởi tạo, chỉ bật map đầu tiên
-            ActivateMap(currentMapIndex);
+            string json = Map_Input.text;
+            maps = new List<MapData>(JsonHelper.FromJson<MapData>(json));
+            Debug.Log($"✅ Loaded {maps.Count} maps từ TextAsset.");
         }
-
-        public void ActivateMap(int mapIndex)
+        else
         {
-            if (mapIndex < 0 || mapIndex >= maps.Length)
-            {
-                Debug.LogError("Map index out of range!");
-                return;
-            }
-
-            // Tắt tất cả map
-            foreach (var map in maps)
-            {
-                map.SetActive(false);
-            }
-
-            // Bật map chỉ định
-            maps[mapIndex].SetActive(true);
-            currentMapIndex = mapIndex;
-
-            Debug.Log($"Activated map: {maps[mapIndex].name}");
-        }
-
-        public void NextMap()
-        {
-            // Chuyển sang map tiếp theo
-            int nextIndex = (currentMapIndex + 1) % maps.Length;
-            ActivateMap(nextIndex);
-        }
-
-        public void PreviousMap()
-        {
-            // Chuyển sang map trước đó
-            int previousIndex = (currentMapIndex - 1 + maps.Length) % maps.Length;
-            ActivateMap(previousIndex);
+            Debug.LogError("❌ Map_Input (TextAsset) chưa được gán!");
         }
     }
+
+    public MapData? GetNextMap()
+    {
+        int nextID = currentMapID + 1;
+        if (nextID < maps.Count) return maps[nextID];
+        return null;
+    }
+
+    public MapData? GetPreviousMap()
+    {
+        int prevID = currentMapID - 1;
+        if (prevID >= 0) return maps[prevID];
+        return null;
+    }
+
+    public void GoToMap(MapDirection direction)
+    {
+        if (direction == MapDirection.Next && currentMapID < maps.Count - 1)
+            currentMapID++;
+        else if (direction == MapDirection.Previous && currentMapID > 0)
+            currentMapID--;
+    }
+
+    public string GetCurrentMapName()
+    {
+        return maps.Count > currentMapID ? maps[currentMapID].name : "Unknown";
+    }
+    public string GetMapNameByID(int id)
+{
+    if (id >= 0 && id < maps.Count)
+        return maps[id].name;
+    return "Unknown";
+}
 }

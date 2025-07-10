@@ -1,0 +1,22 @@
+[
+    {
+        "turn": 1,
+        "speaker": "Bird",
+        "lines": [
+            "Chào mừng đến với trò chơi!",
+            "Hãy theo tôi để bắt đầu hành trình!",
+            "nhấn ... để di chuyển ",
+            "Nhấn vào nút để tấn công",
+            "Chúc Bạn Phiêu lưu tốt "
+        ]
+    },
+    {
+        "turn": 2,
+        "speaker": "Bird",
+        "lines": [
+            "Chào mừng đến với trò chơi!",
+            "Hãy theo tôi để bắt đầu hành trình!"
+        ]
+    }
+
+]

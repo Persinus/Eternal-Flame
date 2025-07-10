@@ -59,7 +59,7 @@ namespace EternalFlame
                 { State.Running, new RunningState(animationAudioFacade) },
                 { State.Jumping_Up, new JumpingUpState(animationAudioFacade) },
                 { State.Jumping_Down, new JumpingDownState(animationAudioFacade) },
-                { State.Attacking, new AttackingState(animationAudioFacade) },
+                { State.Attacking, new AttackingState(animationAudioFacade,this ) },
                 { State.Hit, new HitState(animationAudioFacade) },
                 { State.Dead, new DeadState(animationAudioFacade) }
             };

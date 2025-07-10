@@ -18,11 +18,17 @@ public class MapNameUIManager : MonoBehaviour
         BoundaryTrigger.OnPlayerExitMap -= HideMapName;
     }
 
-    void ShowMapName(string mapName)
-    {
-        mapNameText.gameObject.SetActive(true);
-        mapNameTextComponent.text = mapName;
-    }
+void ShowMapName(MapDirection mapDirection, int index)
+{
+    // Cập nhật map hiện tại
+    MapManager.Instance.currentMapID = index;
+
+    // Lấy tên map từ index
+    string mapName = MapManager.Instance.GetMapNameByID(index);
+
+    mapNameText.gameObject.SetActive(true);
+    mapNameTextComponent.text = mapName;
+}
 
     void HideMapName()
     {

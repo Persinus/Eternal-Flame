@@ -1,0 +1,13 @@
+
+seffect_12515100111.png
+size: 514,217
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+dd
+  rotate: false
+  xy: 2, 2
+  size: 510, 213
+  orig: 600, 300
+  offset: 69, 43
+  index: -1
